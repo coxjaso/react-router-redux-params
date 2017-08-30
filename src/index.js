@@ -8,21 +8,34 @@ const initialState = {
   params: {}
 }
 
-export function syncParams(store, routes, history) {
-  const routesArray = createRoutes(routes)
-  return history.listen(location => {
-    matchRoutes(routesArray, location, (error, state) => {
-      if (!error) {
-        store.dispatch({
-          type: UPDATE_LOCATION_WITH_PARAMS,
-          payload: {
-            location: location,
-            params: state ? state.params : {}
-          }
-        })
-      }
-    })
+// default action creator, you can also use your own by passing it as fourth parameter to syncParams,
+// just remember to use a matching reducer
+function updateLocationWithParams(location, state) {
+  return {
+    type: UPDATE_LOCATION_WITH_PARAMS,
+    payload: {
+      location: location,
+      params: state ? state.params : {}
+    }
+  }
+}
+
+const updateParams = (store, routesArray, actionCreator) => location => {
+  matchRoutes(routesArray, location, (error, state) => {
+    if (!error) {
+      store.dispatch(actionCreator(location, state))
+    }
   })
+}
+
+export function syncParams(store, routes, history, actionCreator = updateLocationWithParams) {
+  const routesArray = createRoutes(routes)
+  const updateDispatcher = updateParams(store, routesArray, actionCreator)
+
+  // dispatch the initial params manually
+  updateDispatcher(history.getCurrentLocation())
+
+  return history.listen(updateDispatcher)
 }
 
 export function routeParamsReducer(state = initialState, { type, payload }) {

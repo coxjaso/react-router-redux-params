@@ -2,7 +2,7 @@
 
 Provides extra methods for [react-router-redux](https://github.com/reactjs/react-router-redux) which store [react-router](https://github.com/reactjs/react-router) route params in addition to history location object.
 
-You won't need this if you're only accessing route params inside your components, react-router already provides params as prop. This is meant for usage outside component tree, for example with [refire](https://github.com/hoppula/refire).
+You won't need this if you're only accessing route params inside your components, react-router already provides params as a prop. This is meant for usage outside component tree, for example with [refire](https://github.com/hoppula/refire).
 
 **NOTE** This hasn't been tested with [redux-devtools](https://github.com/gaearon/redux-devtools), breakage might ensue.
 
@@ -32,6 +32,7 @@ const createStoreWithMiddleware = applyMiddleware(
 )(createStore)
 
 const store = createStoreWithMiddleware(reducer)
+// syncParams also accepts custom action creator as fourth parameter, see src/index.js for more info
 syncParams(store, routes, browserHistory)
 
 ReactDOM.render(
