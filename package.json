@@ -1,6 +1,6 @@
 {
   "name": "react-router-redux-params",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Extends react-router-redux to store react-router params to Redux",
   "main": "lib/index.js",
   "keywords": [
